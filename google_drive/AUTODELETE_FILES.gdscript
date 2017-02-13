@@ -1,0 +1,31 @@
+// This google script will delete your google drive files every 30 days
+// Make sure to modify the myemail@gmail.com fields below!
+
+function DeleteMyFiles(){ 
+    var files = null;
+    var i = null;
+    var ThirtyDaysBeforeNow = new Date().getTime()-3600*1000*24*30; // 30 is the number of days, time is in milliseconds 
+    Logger.clear()
+
+    var files = DriveApp.getFiles();
+  
+    while (files.hasNext()) {
+        var file=files.next();
+        if((file.getName().toLowerCase().match('.jpg')=='.jpg' || file.getName().toLowerCase().match('.avi')=='.avi') && file.getDateCreated().getTime()<ThirtyDaysBeforeNow){
+            file.setTrashed(true)
+            Logger.log(file.getName()+' created on '+Utilities.formatDate(file.getDateCreated(), 'GMT','MMM-dd-yyyy'))               
+        }
+      }    
+  
+      var folders = DriveApp.getFolders();
+      while (folders.hasNext()) {
+        var folder=folders.next();
+        if((folder.getName() != 'Camera') && (folder.getDateCreated().getTime()<ThirtyDaysBeforeNow)){
+            folder.setTrashed(true)         
+        }
+      }  
+
+      //MailApp.sendEmail('myemail@gmail.com', 'Script AUTODELETE_FILES report', Logger.getLog());
+      //MailApp.sendEmail('myemail@gmail.com', 'Script AUTODELETE_FILES report', ThirtyDaysBeforeNow);  
+  
+} 

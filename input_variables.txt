@@ -1,0 +1,84 @@
+##################################################
+#    AFTER SAVING THIS FILE, MAKE SURE TO RUN    # 
+#    SUDO PYTHON REBOOT.PY IN /HOME/PI/DESKTOP   #
+# (OR CLICK ON THE RESTART BUTTON ON YOUR PHONE) #              
+#   IN ORDER TO MAKE THESE CHANGES TAKE EFFECT   # 
+##################################################
+
+# Raspberry pi local IP address:
+ip_address 192.168.1.80 
+
+# Raspberry pi domain name:
+domain_name mydomain.name.com
+
+# Enter the full path of the python interpreter (type: which python):
+python_interpreter /usr/bin/python
+
+
+# The port (e.g. 192.168.1.80:8081) that allows the user to via the live video feed:
+video_port 8081
+
+# The port (e.g. 192.168.1.80:8086) that allows the user to run Motion software commands (e.g. start, pause) via HTML :
+control_port 8086 
+
+
+# Enter your username and password (make sure to keep the colon) for the live video feed:
+video_credentials username:password
+
+# Enter the degree of rotation need for viewing the live feed (0,90,180,270):
+rotate_camera 0
+
+
+# The email address of the Insync profile (gmail only):
+##### Note: Just found a potential bug...if this ever has to be updated after it is saved, 
+##### then you also need to manually update automate_tasks.txt in line: 31 1 * * * sudo ...
+insync_email myemail@gmail.com
+	
+# Whether or not to send push notifications via Pushbullet (True/False).
+##### Of note, Pushbullet doesn't actually push notifications to IOS devices right now...
+use_pushbullet False
+
+# The Pushbullet Access Token, which can be acquired at https://www.pushbullet.com/#settings/account
+##### This can also be a list of access tokens, making sure each line begins with 'access_token':
+access_token o.aGEGWfgewgwAyjfWHkyebsdfsdfr
+
+# Whether or not you want to send text message notifications (True/False):
+send_text True
+
+# The number and cell-phone service to be used; this can be found at:
+##### http://www.linuxjournal.com/content/system-status-sms-text-messages
+##### For example, for AT&T it would be: 1234567890@txt.att.net and for Verizon it would be: 1234567890@vtext.com
+##### This can also be a list of numbers, making sure each line begins with 'my_number':
+my_number 1234567890@vtext.com
+
+# Whether or not to send an email with a picture of a motion event (True/False):
+send_email True
+
+# Whether or not to send an email if a sensor is activated (True/False):
+email_basic False
+
+# The email address to send notifications to (any client will do).
+##### This can also be a list of emails, making sure each line begins with 'my_email': 
+my_email myaddress@gmail.com
+
+
+# The radiofrequency (RF) numeric code for turning the siren on (the S button):
+siren_on 15346345
+
+# The radiofrequency (RF) numeric code for turning the siren off (the lock button):
+siren_off 15346344
+
+# The other radiofrequency (RF) numeric code for turning the siren off (the unlock button).
+##### Note: this button can be used to disarm the system in case no smart phone is available.
+##### The format must be kept as rf_code_0 RFCODE:Trigger_Disarm, where RFCODE is the numeric code.
+rf_code_0 15346343:Disarm_System
+
+# List the radiofrequency (RF) numeric codes and their corresponding names, with spaces represented by an underscore.
+##### List as many as you want, making sure the last line of this .txt file is an empty space. In each name, one of the 
+##### following terms MUST be included: Door, Window, Glass, Motion, or Monoxide. The colon also needs to be present. 
+rf_code_1 34583546:Front_Door
+rf_code_2 46389653:Back_Door
+rf_code_3 92456390:Main_Hall_Motion_Sensor
+rf_code_4 6734537:Front_Living_Room_Window
+rf_code_5 23474564:Kitchen_Glass_Break
+rf_code_6 4574563:Carbon_Monoxide_Detector

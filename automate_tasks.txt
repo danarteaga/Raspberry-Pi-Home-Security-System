@@ -1,0 +1,26 @@
+# The following commands are run either at startup are at a given interval
+# Refer to http://askubuntu.com/questions/2368/how-do-i-set-up-a-cron-job for more information.
+
+
+@reboot sudo python /home/pi/Desktop/restart_insync.py >/dev/null 2>&1
+
+# The following 2 commands will enable you to use output from the speakers
+@reboot sudo modprobe snd_pcm_oss
+@reboot sudo modprobe snd_mixer_oss
+
+# Start the Motion software
+@reboot sudo /home/pi/Desktop/motion -n -c /home/pi/Desktop/motion-mmalcam.conf >/dev/null 2>&1
+@reboot sleep 10 && /bin/sh /home/pi/Desktop/check_system.sh >/dev/null 2>&1
+@reboot cd /home/pi/Desktop && sudo python /home/pi/Desktop/on_file_new.py >/dev/null 2>&1
+
+*/10 * * * * sudo python /home/pi/Desktop/restart_insync.py >/dev/null 2>&1
+0 * * * * cd /home/pi/Desktop && sudo python /home/pi/Desktop/remove_push.py >/dev/null 2>&1
+
+# This will remove files in your Camera folder that are older than 30 days
+31 1 * * * sudo find /home/pi/insync_email@gmail.com/Camera -type d -ctime +30 -exec rm -rf {} \; >/dev/null 2>&1
+
+# This command is needed to clear up space taken up by unnecessary logging
+*/1 * * * * /bin/sh /home/pi/Desktop/disk_cleanup.sh >/dev/null 2>&1
+
+# The pi benefits from a nice restart once a week (every Sunday at 2AM)
+0 2 * * 0 sudo reboot
