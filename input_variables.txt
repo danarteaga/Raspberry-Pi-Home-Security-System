@@ -14,13 +14,17 @@ domain_name mydomain.name.com
 # Enter the full path of the python interpreter (type: which python):
 python_interpreter /usr/bin/python
 
-
-# The port (e.g. 192.168.1.80:8081) that allows the user to via the live video feed:
+# The port (e.g. 192.168.1.80:8081) that allows the user to via the live video feed.
+##### Note: If you are running multiple RPIs, each pi must have a unique video_port ID 
 video_port 8081
 
 # The port (e.g. 192.168.1.80:8086) that allows the user to run Motion software commands (e.g. start, pause) via HTML :
+##### Note: If you are running multiple RPIs, each pi must have a unique control_port ID 
 control_port 8086 
 
+
+# Name of the camera for this Raspberry Pi (separate spaces with '_'):
+camera_name Living_Room
 
 # Enter your username and password (make sure to keep the colon) for the live video feed:
 video_credentials username:password
@@ -61,6 +65,9 @@ email_basic False
 ##### This can also be a list of emails, making sure each line begins with 'my_email': 
 my_email myaddress@gmail.com
 
+
+# You do not need to complete below this line for Raspberry Pis that will function solely as cameras
+#####################################################################################################
 
 # The radiofrequency (RF) numeric code for turning the siren on (the S button):
 siren_on 15346345

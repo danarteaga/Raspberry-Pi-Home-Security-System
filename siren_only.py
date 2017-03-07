@@ -156,40 +156,25 @@ while siren_status == True and os.path.isfile('/home/pi/Desktop/txt_files/myfile
 		to_run1 = "sudo " + send_script + " %s" %(siren_on)
 		os.system(to_run1)
 		
-# Turn siren off if siren manually deactivated
-if time_expired == False:
+# Kill the speaker siren 
+p = subprocess.Popen(['ps', '-A'], stdout=subprocess.PIPE)
+out, err = p.communicate()
+for line in out.splitlines():
+	if 'mpg321' in line:
+		pid = int(line.split(None, 1)[0])
+		to_kill = "sudo kill %s" %(pid)
+		os.system(to_kill)			
 
-	# Kill the speaker siren 
-	p = subprocess.Popen(['ps', '-A'], stdout=subprocess.PIPE)
-	out, err = p.communicate()
-	for line in out.splitlines():
-		if 'mpg321' in line:
-			pid = int(line.split(None, 1)[0])
-			to_kill = "sudo kill %s" %(pid)
-			os.system(to_kill)			
+# Turn off siren(s)
+to_siren = "sudo " + send_script + " %s" %(siren_off)
+os.system(to_siren)
+os.system(to_siren)						
+os.system(to_siren)						
+os.system(to_siren)	
+os.system(to_siren)
+os.system(to_siren)
+os.system(to_siren)	
 
-	# Turn off siren(s)
-	to_siren = "sudo " + send_script + " %s" %(siren_off)
-	os.system(to_siren)
-	os.system(to_siren)						
-	os.system(to_siren)						
-	os.system(to_siren)	
-	os.system(to_siren)
-	os.system(to_siren)
-	os.system(to_siren)	
-	
-else:
-
-	# System will remained armed (camera will at least keep recording)
-	# Kill the speaker siren
-	p = subprocess.Popen(['ps', '-A'], stdout=subprocess.PIPE)
-	out, err = p.communicate()
-	for line in out.splitlines():
-		if 'mpg321' in line:
-			pid = int(line.split(None, 1)[0])
-			to_kill = "sudo kill %s" %(pid)
-			os.system(to_kill)	
-	
 # Send text notifications about event closure
 if time_expired == False:
 

@@ -11,6 +11,7 @@
 # Start the Motion software
 @reboot sudo /home/pi/Desktop/motion -n -c /home/pi/Desktop/motion-mmalcam.conf >/dev/null 2>&1
 @reboot sleep 10 && /bin/sh /home/pi/Desktop/check_system.sh >/dev/null 2>&1
+@reboot cd /home/pi/Desktop && sudo python /home/pi/Desktop/alarm.py >/dev/null 2>&1
 @reboot cd /home/pi/Desktop && sudo python /home/pi/Desktop/on_file_new.py >/dev/null 2>&1
 
 */10 * * * * sudo python /home/pi/Desktop/restart_insync.py >/dev/null 2>&1

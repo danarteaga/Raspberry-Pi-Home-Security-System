@@ -434,8 +434,15 @@ while looper == True:
 						os.system(to_siren)
 
 					else:
-						# System will remained armed for now
-						pass
+						# Turn off the sirens
+						to_siren = "sudo " + send_script + " %s" %(siren_off)
+						os.system(to_siren)
+						os.system(to_siren)						
+						os.system(to_siren)						
+						os.system(to_siren)	
+						os.system(to_siren)
+						os.system(to_siren)
+						os.system(to_siren)
 					
 					# Send text notifications about event closure
 					if time_expired == False:

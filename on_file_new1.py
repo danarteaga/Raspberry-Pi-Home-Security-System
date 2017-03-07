@@ -24,6 +24,8 @@ for new_lines in content:
 				send_text = new_lines.split(" ")[1:][0]		
 			if 'my_number' in new_lines:
 				text_list.append(new_lines.split(" ")[1:][0])	
+			if 'camera_name' in new_lines:
+				camera_name = new_lines.split(" ")[1:][0]			
 			if 'insync_email' in new_lines:
 				insync_email = new_lines.split(" ")[1:][0]		
 			if 'send_email' in new_lines:
@@ -58,7 +60,10 @@ else:
 if send_email_basic == 'True' or send_email_basic == 'true' or send_email_basic == 'TRUE':
 	send_email_basic = True	
 else:
-	send_email_basic = False			
+	send_email_basic = False	
+
+# Remove all '_' from the name
+camera_name.replace('_',' ')	
 
 # Import required libraries
 import os,glob,datetime,time
@@ -166,11 +171,11 @@ to_name = 'sudo cp %s %s' %(middle_image,new_file_name)
 os.system(to_name)
 
 # Send image as push notification	
+new_motion = "New Motion in %s" %(camera_name)
 if use_pushbullet == True:
 	for itir,pushme1 in enumerate(pushbullet_list):
-
 		with open(new_file_name, "rb") as picture:
-			file_data = pushme1.upload_file(picture, "New Motion")	
+			file_data = pushme1.upload_file(picture, new_motion)	
 		pushme1.push_file(**file_data)
 
 		# Save the identity of the push to delete after 2 days
@@ -181,7 +186,7 @@ if use_pushbullet == True:
 		
 if send_email == True:
 	for my_email in email_list:
-		to_send1 = 'mpack -s "New Motion" %s %s' %(new_file_name,my_email)
+		to_send1 = 'mpack -s %s %s %s' %(camera_name,new_file_name,my_email)
 		os.system(to_send1)	
 
 # Move the jpg file to the insync directory

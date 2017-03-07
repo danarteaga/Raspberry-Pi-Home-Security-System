@@ -22,5 +22,3 @@ else
   # If armed.txt is 1 (armed), start Motion software
   /usr/bin/wget -q -O /dev/null "192.168.1.80:8086/0/detection/start"
 fi
-
-sudo python /home/pi/Desktop/alarm.py >/dev/null 2>&1

@@ -40,33 +40,63 @@ for new_lines in content:
 		pass				
 		
 # Update the activate_system.sh file
+only_once = False
 for i, line in enumerate(fileinput.input('activate_system.sh', inplace=1)):
-	if '/usr/bin/wget' in line and line[0] != '#':
+	if '/usr/bin/wget' in line and line[0] != '#' and only_once == False:
 		to_out = '/usr/bin/wget -q -O /dev/null "%s:%s/0/detection/start"' %(ip_address,control_port)
 		sys.stdout.write(to_out)
 		sys.stdout.write('\n')	
+		only_once = True
 	else:
 		sys.stdout.write(line.replace('\r', ''))	
 
 # Update the deactivate_system.sh file
+only_once = False
 for i, line in enumerate(fileinput.input('deactivate_system.sh', inplace=1)):
-	if '/usr/bin/wget' in line and line[0] != '#':
+	if '/usr/bin/wget' in line and line[0] != '#' and only_once == False:
 		to_out = '/usr/bin/wget -q -O /dev/null "%s:%s/0/detection/pause"' %(ip_address,control_port)
 		sys.stdout.write(to_out)	
-		sys.stdout.write('\n')	
+		sys.stdout.write('\n')
+		only_once = True		
 	else:
 		sys.stdout.write(line.replace('\r', ''))	
 		
+# Update the pause_motion.sh file
+only_once = False
+for i, line in enumerate(fileinput.input('pause_motion.sh', inplace=1)):
+	if '/usr/bin/wget' in line and line[0] != '#' and only_once == False:
+		to_out = '/usr/bin/wget -q -O /dev/null "%s:%s/0/detection/pause"' %(ip_address,control_port)
+		sys.stdout.write(to_out)	
+		sys.stdout.write('\n')
+		only_once = True		
+	else:
+		sys.stdout.write(line.replace('\r', ''))	
+
+# Update the start_motion.sh file
+only_once = False
+for i, line in enumerate(fileinput.input('pause_motion.sh', inplace=1)):
+	if '/usr/bin/wget' in line and line[0] != '#' and only_once == False:
+		to_out = '/usr/bin/wget -q -O /dev/null "%s:%s/0/detection/start"' %(ip_address,control_port)
+		sys.stdout.write(to_out)	
+		sys.stdout.write('\n')
+		only_once = True		
+	else:
+		sys.stdout.write(line.replace('\r', ''))		
+		
 # Update the check_system.sh file
+only_once = False
+only_once1 = False
 for i, line in enumerate(fileinput.input('check_system.sh', inplace=1)):	
-	if '/usr/bin/wget' in line and line[0] != '#' and 'start' in line:
+	if '/usr/bin/wget' in line and line[0] != '#' and 'start' in line and only_once == False:
 		to_out = '  /usr/bin/wget -q -O /dev/null "%s:%s/0/detection/start"' %(ip_address,control_port)
 		sys.stdout.write(to_out)
-		sys.stdout.write('\n')	
-	elif '/usr/bin/wget' in line and line[0] != '#' and 'pause' in line:
+		sys.stdout.write('\n')
+		only_once = True
+	elif '/usr/bin/wget' in line and line[0] != '#' and 'pause' in line and only_once1 == False:
 		to_out = '    /usr/bin/wget -q -O /dev/null "%s:%s/0/detection/pause"' %(ip_address,control_port)
 		sys.stdout.write(to_out)
 		sys.stdout.write('\n')	
+		only_once1 = True
 	else:
 		sys.stdout.write(line.replace('\r', ''))		
 		
