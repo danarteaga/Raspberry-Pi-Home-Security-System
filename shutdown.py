@@ -74,7 +74,7 @@ for i, line in enumerate(fileinput.input('pause_motion.sh', inplace=1)):
 
 # Update the start_motion.sh file
 only_once = False
-for i, line in enumerate(fileinput.input('pause_motion.sh', inplace=1)):
+for i, line in enumerate(fileinput.input('start_motion.sh', inplace=1)):
 	if '/usr/bin/wget' in line and line[0] != '#' and only_once == False:
 		to_out = '/usr/bin/wget -q -O /dev/null "%s:%s/0/detection/start"' %(ip_address,control_port)
 		sys.stdout.write(to_out)	
