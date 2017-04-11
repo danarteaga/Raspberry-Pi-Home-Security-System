@@ -63,7 +63,7 @@ else:
 	send_email_basic = False	
 
 # Remove all '_' from the name
-camera_name.replace('_',' ')	
+camera_name = camera_name.replace('_',' ')	
 
 # Import required libraries
 import os,glob,datetime,time
@@ -212,4 +212,10 @@ os.system(to_do)
 
 # Delete this temporary Camera directory
 to_delete = 'sudo rm -r /home/pi/Desktop/Camera_%s' %(new_fold)
+os.chdir('/home/pi/Desktop/')
 os.system(to_delete)
+
+# Remove this directory
+#cwd = os.getcwd()
+#os.chdir('/home/pi/Desktop/')
+#os.system(cwd)
