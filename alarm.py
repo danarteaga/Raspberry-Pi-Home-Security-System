@@ -331,7 +331,7 @@ while looper == True:
 				os.system("echo -n 1 > txt_files/motion_sound.txt")					
 				
 				# Turn on siren if system still armed after 30 seconds!
-				if armed_status == "1" and turn_on_siren == True:
+				if armed_status == "1" and turn_on_siren == True:			
 								
 					# Turn on siren played through the speakers, where -g 100 is the volume
 					p5 = subprocess.Popen("sudo -u pi mpg321 -g 100 sound_files/alarm.mp3", shell=True, stdout=subprocess.PIPE)		
@@ -495,7 +495,7 @@ while looper == True:
 				os.system("rm /home/pi/Desktop/txt_files/myfile.txt")					
 					
 				# Allow other sound to come from speakers again
-				os.system("echo -n 1 > txt_files/motion_sound.txt")
+				os.system("echo -n 1 > txt_files/motion_sound.txt")				
 					
 					
 	except KeyboardInterrupt:
@@ -509,7 +509,7 @@ while looper == True:
 		os.chdir('/home/pi/Desktop')	
 		
 		# Remove file created when siren manually deactivated
-		os.system("rm /home/pi/Desktop/txt_files/myfile.txt")	
+		os.system("rm /home/pi/Desktop/txt_files/myfile.txt")			
 	
 		# Kill RF Sniffer
 		os.system("sudo kill %s" %(p0.pid, ))			
