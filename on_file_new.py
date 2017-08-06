@@ -52,7 +52,7 @@ while xbo == False:
 		
 		# Run the on_file_new1.py script, then keep looping through
 		to_out = '%s /home/pi/Desktop/on_file_new1.py %s' %(python_interpreter,new_fold) 
-		p5 = subprocess.Popen(to_out, shell=True, stdout=subprocess.PIPE)
+		subprocess.Popen(to_out, shell=True, stdout=subprocess.PIPE)
 		
 		# Remove file, which is created when new motion detected by camera 
 		os.system('sudo rm /home/pi/Desktop/txt_files/motion_files.txt')

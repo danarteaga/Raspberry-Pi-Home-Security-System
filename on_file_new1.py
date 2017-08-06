@@ -72,7 +72,7 @@ from scipy.misc import imread
 from scipy.linalg import norm
 from scipy import sum, average
 
-# The following functions are used to compare consecuative images to look for motion
+# The following functions are used to compare consecutive images to look for motion
 def my_function(file1,file2):
     # read images as 2D arrays (convert to grayscale for simplicity)
     img1 = to_grayscale(imread(file1).astype(float))
@@ -148,7 +148,7 @@ jpg_files = sorted(glob.glob('*jpg'), reverse=False)
 # Create avi (video) file by using ffmpeg - msmpeg4?
 to_avi = "sudo ffmpeg -framerate 5 -i 'image_%05d.jpg' -vcodec mpeg4" 
 to_avi += " %s.avi" %(new_file_name[:-4])
-p55 = subprocess.Popen(to_avi, shell=True, stdout=subprocess.PIPE)
+subprocess.Popen(to_avi, shell=True, stdout=subprocess.PIPE)
 	
 # Determine the name of the last jpeg file to use as a reference for motion comparisons	
 last_jpg_file = jpg_files[len(jpg_files)-1]
