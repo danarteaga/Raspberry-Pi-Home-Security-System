@@ -33,7 +33,7 @@ for myfolder in mylist:
 	#if (curtime/3600) < 1:
 	#	pass
 	#else:	
-	to_out = '%s /home/pi/Desktop/on_file_new1.py %s' %(python_interpreter,myfolder[7:]) 
+	to_out = '%s /home/pi/Desktop/on_file_new2.py %s' %(python_interpreter,myfolder[7:]) 
 	subprocess.Popen(to_out, shell=True, stdout=subprocess.PIPE)
 
 		

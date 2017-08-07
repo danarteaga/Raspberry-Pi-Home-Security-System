@@ -17,8 +17,8 @@
 */10 * * * * sudo python /home/pi/Desktop/restart_insync.py >/dev/null 2>&1
 0 * * * * cd /home/pi/Desktop && sudo python /home/pi/Desktop/remove_push.py >/dev/null 2>&1
 
-# This will remove undeleted Camera folders every day
-30 2 * * * sudo python /home/pi/Desktop/cleanup.py >/dev/null 2>&1
+# This will remove undeleted Camera folders every 6 hours
+0 */6 * * * sudo python /home/pi/Desktop/cleanup.py >/dev/null 2>&1
 
 # This will remove files in your Camera folder that are older than 30 days
 31 1 * * * sudo find /home/pi/insync_email@gmail.com/Camera -type d -ctime +30 -exec rm -rf {} \; >/dev/null 2>&1
