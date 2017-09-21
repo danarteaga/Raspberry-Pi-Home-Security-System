@@ -67,8 +67,11 @@ import os,sys,time
 # Import push notification library
 if use_pushbullet == True:
 	from pushbullet import Pushbullet
-	for access_token in token_list:
-		pushbullet_list.append(Pushbullet(access_token))
+	try:
+		for access_token in token_list:
+			pushbullet_list.append(Pushbullet(access_token))
+	except: 
+		pass
 
 # Import arguments
 door_to_show = sys.argv[1]

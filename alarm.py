@@ -82,8 +82,11 @@ for yt in range(1,100):
 # Import push notification library
 if use_pushbullet == True:
 	from pushbullet import Pushbullet
-	for access_token in token_list:
-		pushbullet_list.append(Pushbullet(access_token))
+	try:
+		for access_token in token_list:
+			pushbullet_list.append(Pushbullet(access_token))
+	except:
+		use_pushbullet = 'RETEST'		
 
 # To kill a process manually -> type 'top' to obtain pid then 'sudo kill pid'
 # Kill all the current RF Sniffer instances!
@@ -93,7 +96,7 @@ for line in out.splitlines():
 	if 'RFSniffer' in line:
 		pid = int(line.split(None, 1)[0])
 		to_kill = "sudo kill %s" %(pid)
-		os.system(to_kill)
+		os.system(to_kill)		
 	
 # Path to executables
 send_script = "/home/pi/433Utils/RPi_utils/codesend"
@@ -317,21 +320,21 @@ while looper == True:
 						
 					else:										
 					
-						break_loop = True		
-
-				# Reset triggered files	
-				os.chdir('/home/pi/Desktop/txt_files')
-				trigger_list = glob.glob("*trigger.txt*")
-				for file4 in trigger_list:
-					to_del = "sudo rm /home/pi/Desktop/txt_files/%s" %(file4)
-					os.system(to_del)
-				os.chdir('/home/pi/Desktop')						
-				
-				# Allow other sound to come from speakers again
-				os.system("echo -n 1 > txt_files/motion_sound.txt")					
+						break_loop = True						
 				
 				# Turn on siren if system still armed after 30 seconds!
-				if armed_status == "1" and turn_on_siren == True:			
+				if armed_status == "1" and turn_on_siren == True:		
+				
+					if use_pushbullet == 'RETEST':
+						try:
+							for access_token in token_list:
+								pushbullet_list.append(Pushbullet(access_token))
+							use_pushbullet = True
+						except:
+							pass
+
+					# When myfile.txt is created again when deactivate_system.sh is started, then siren will stop
+					os.system("rm /home/pi/Desktop/txt_files/myfile.txt")					
 								
 					# Turn on siren played through the speakers, where -g 100 is the volume
 					p5 = subprocess.Popen("sudo -u pi mpg321 -g 100 sound_files/alarm.mp3", shell=True, stdout=subprocess.PIPE)		
@@ -340,7 +343,7 @@ while looper == True:
 					to_siren = "sudo " + send_script + " %s" %(siren_on)
 					os.system(to_siren)		
 
-					# Send text/email/pushbullet warning if sensor that is tripped				
+					# Send text/email/pushbullet warning of sensor that is tripped				
 					if send_text == True:
 						for my_number in text_list:
 							to_send1 = 'echo "Siren activated" | mail -s "Alert" %s' %(my_number)
@@ -352,18 +355,18 @@ while looper == True:
 							os.system(to_send1)
 
 					if use_pushbullet == True:	
-						for itir,pushme1 in enumerate(pushbullet_list):
-							pushme1.push_note("Alert","Siren activated")	
-							new_push = pushme1.get_pushes()
-							
-							# Save the identity of the push to delete after 2 days
-							identity1 = new_push[0].get("iden")
-							to_identity = 'echo "%s %s" >> /home/pi/Desktop/txt_files/push_list%s.txt' %(identity1, time.time(),itir)
-							os.system(to_identity)	
-
-					# When myfile.txt is created again when deactivate_system.sh is started, then siren will stop
-					os.system("rm /home/pi/Desktop/txt_files/myfile.txt")						
-
+						try:
+							for itir,pushme1 in enumerate(pushbullet_list):
+								pushme1.push_note("Alert","Siren activated")	
+								new_push = pushme1.get_pushes()
+								
+								# Save the identity of the push to delete after 2 days
+								identity1 = new_push[0].get("iden")
+								to_identity = 'echo "%s %s" >> /home/pi/Desktop/txt_files/push_list%s.txt' %(identity1, time.time(),itir)
+								os.system(to_identity)	
+						except:
+							pass
+						
 					# Only turn on siren for six 30 second cycles (separated by 15 second pauses)
 					time_counter = 1
 					time_expired = False
@@ -397,6 +400,7 @@ while looper == True:
 							# Reset siren begin time	
 							siren_begin_time = time.time()
 						
+						"""
 						# Siren will automatically turn off after 30 seconds, pause for 15 seconds, 
 						# then turn on for another 30 seconds to complete a cycle
 						if (time.time()-begin_time) > 90:
@@ -407,6 +411,7 @@ while looper == True:
 							# Turn on siren again
 							to_siren = "sudo " + send_script + " %s" %(siren_on)
 							os.system(to_siren)
+						"""	
 						
 					# Kill the speaker siren sound
 					p = subprocess.Popen(['ps', '-A'], stdout=subprocess.PIPE)
@@ -459,14 +464,17 @@ while looper == True:
 								os.system(to_send1)
 
 						if use_pushbullet == True:		
-							for itir,pushme1 in enumerate(pushbullet_list):
-								pushme1.push_note("Alert","Siren manually turned off")		
-								new_push = pushme1.get_pushes()
-								
-								# Save the identity of the push to delete after 2 days
-								identity1 = new_push[0].get("iden")
-								to_identity = 'echo "%s %s" >> /home/pi/Desktop/txt_files/push_list%s.txt' %(identity1, time.time(),itir)
-								os.system(to_identity)									
+							try:
+								for itir,pushme1 in enumerate(pushbullet_list):
+									pushme1.push_note("Alert","Siren manually turned off")		
+									new_push = pushme1.get_pushes()
+									
+									# Save the identity of the push to delete after 2 days
+									identity1 = new_push[0].get("iden")
+									to_identity = 'echo "%s %s" >> /home/pi/Desktop/txt_files/push_list%s.txt' %(identity1, time.time(),itir)
+									os.system(to_identity)	
+							except:
+								pass
 					
 					else:
 					
@@ -483,19 +491,33 @@ while looper == True:
 
 						if use_pushbullet == True:		
 							for itir,pushme1 in enumerate(pushbullet_list):
-								pushme1.push_note("Alert","Siren turned off after 5 minutes")	
-								new_push = pushme1.get_pushes()
-								
-								# Save the identity of the push to delete after 2 days
-								identity1 = new_push[0].get("iden")
-								to_identity = 'echo "%s %s" >> /home/pi/Desktop/txt_files/push_list%s.txt' %(identity1, time.time(),itir)
-								os.system(to_identity)	
-					
+								try:
+									pushme1.push_note("Alert","Siren turned off after 5 minutes")	
+									new_push = pushme1.get_pushes()
+									
+									# Save the identity of the push to delete after 2 days
+									identity1 = new_push[0].get("iden")
+									to_identity = 'echo "%s %s" >> /home/pi/Desktop/txt_files/push_list%s.txt' %(identity1, time.time(),itir)
+									os.system(to_identity)		
+								except:
+									pass
+				
+				# Reset triggered files	
+				os.chdir('/home/pi/Desktop/txt_files')
+				trigger_list = glob.glob("*trigger.txt*")
+				for file4 in trigger_list:
+					to_del = "sudo rm /home/pi/Desktop/txt_files/%s" %(file4)
+					os.system(to_del)
+				os.chdir('/home/pi/Desktop')						
+				
+				# Allow other sound to come from speakers again
+				os.system("echo -n 1 > txt_files/motion_sound.txt")	
+				
 				# Remove file created when siren manually deactivated
 				os.system("rm /home/pi/Desktop/txt_files/myfile.txt")					
 					
 				# Allow other sound to come from speakers again
-				os.system("echo -n 1 > txt_files/motion_sound.txt")				
+				os.system("echo -n 1 > txt_files/motion_sound.txt")	
 					
 					
 	except KeyboardInterrupt:

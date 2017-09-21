@@ -62,6 +62,8 @@ send_email True
 email_basic False
 
 # The email address to send notifications to (any client will do).
+# Make sure to put your email down even if you intend to receive notifications via PushBullet;
+# if PushBullet fails, it will default to sending emails instead.
 ##### This can also be a list of emails, making sure each line begins with 'my_email': 
 my_email myaddress@gmail.com
 

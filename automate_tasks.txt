@@ -11,20 +11,25 @@
 # Start the Motion software
 @reboot sudo /home/pi/Desktop/motion -n -c /home/pi/Desktop/motion-mmalcam.conf >/dev/null 2>&1
 @reboot sleep 10 && /bin/sh /home/pi/Desktop/check_system.sh >/dev/null 2>&1
-@reboot cd /home/pi/Desktop && sudo python /home/pi/Desktop/alarm.py >/dev/null 2>&1
 @reboot cd /home/pi/Desktop && sudo python /home/pi/Desktop/on_file_new.py >/dev/null 2>&1
 
 */10 * * * * sudo python /home/pi/Desktop/restart_insync.py >/dev/null 2>&1
 0 * * * * cd /home/pi/Desktop && sudo python /home/pi/Desktop/remove_push.py >/dev/null 2>&1
 
-# This will remove undeleted Camera folders every 6 hours
-0 */6 * * * sudo python /home/pi/Desktop/cleanup.py >/dev/null 2>&1
-
 # This will remove files in your Camera folder that are older than 30 days
-31 1 * * * sudo find /home/pi/insync_email@gmail.com/Camera -type d -ctime +30 -exec rm -rf {} \; >/dev/null 2>&1
+31 1 * * * sudo find /home/pi/vandpire@gmail.com/Camera -type d -ctime +30 -exec rm -rf {} \; >/dev/null 2>&1
+
+# This will reprocess undeleted Camera folders every 30 minutes
+30 * * * * cd /home/pi/Desktop && sudo python /home/pi/Desktop/cleanup.py >/dev/null 2>&1
+
+# Start Amazon Echo script
+* * * * * cd /home/pi/Desktop && sudo python /home/pi/Desktop/alexa_pi.py >/dev/null 2>&1
 
 # This command is needed to clear up space taken up by unnecessary logging
 */1 * * * * /bin/sh /home/pi/Desktop/disk_cleanup.sh >/dev/null 2>&1
+
+# Run the DuckDNS update check every 5 minutes
+#*/5 * * * * sudo /home/pi/Desktop/duckdns/duck.sh >/dev/null 2>&1
 
 # The pi benefits from a nice restart once a week (every Sunday at 2AM)
 0 2 * * 0 sudo reboot

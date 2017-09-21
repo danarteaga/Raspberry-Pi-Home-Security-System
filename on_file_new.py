@@ -43,11 +43,11 @@ while xbo == False:
 		new_fold = new_fold[0]
 		
 		# Create new random directory
-		to_move1 = 'sudo mkdir /home/pi/Desktop/Camera_%s' %(new_fold) 		
+		to_move1 = 'mkdir /home/pi/Desktop/Camera_%s' %(new_fold) 		
 		os.system(to_move1)
 		
 		# Move the files to this new temporary directory
-		to_move2 = 'sudo mv *jpg* /home/pi/Desktop/Camera_%s' %(new_fold) 
+		to_move2 = 'mv *jpg* /home/pi/Desktop/Camera_%s' %(new_fold) 
 		os.system(to_move2)
 		
 		# Run the on_file_new1.py script, then keep looping through

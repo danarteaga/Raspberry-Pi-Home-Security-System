@@ -130,6 +130,10 @@ else:
 jpg_files = sorted(glob.glob('*jpg'), reverse=False)
 new_file_name = jpg_files[0]
 
+# Move the jpg file to the insync directory
+to_move1 = 'sudo cp %s %s' %(new_file_name,directory_me) 
+os.system(to_move1)
+
 # Now rename all files for simplicity
 for xt,my_file1 in enumerate(jpg_files):
 	to_do = 'sudo mv %s image_' %(my_file1)
@@ -143,11 +147,8 @@ jpg_files = sorted(glob.glob('*jpg'), reverse=False)
 # Create avi (video) file by using ffmpeg - msmpeg4?
 to_avi = "sudo ffmpeg -framerate 5 -i 'image_%05d.jpg' -vcodec mpeg4" 
 to_avi += " %s.avi" %(new_file_name[:-4])
-subprocess.Popen(to_avi, shell=True, stdout=subprocess.PIPE)
-
-# Move the jpg file to the insync directory
-to_move1 = 'sudo mv %s %s' %(new_file_name,directory_me) 
-os.system(to_move1)
+#subprocess.Popen(to_avi, shell=True, stdout=subprocess.PIPE)
+os.system(to_avi)
 
 # Remove all the other jpg files
 os.system('sudo rm *jpg* >/dev/null 2>&1')
@@ -166,12 +167,15 @@ while ab == False:
 to_do = 'sudo mv *avi* %s' %(directory_me) 
 os.system(to_do)
 
+
 # Delete this temporary Camera directory
 to_delete = 'sudo rm -r /home/pi/Desktop/Camera_%s' %(new_fold)
 os.chdir('/home/pi/Desktop/')
 os.system(to_delete)
 
+
 # Remove this directory
 #cwd = os.getcwd()
 #os.chdir('/home/pi/Desktop/')
 #os.system(cwd)
+

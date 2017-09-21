@@ -60,7 +60,7 @@ else:
 if send_email_basic == 'True' or send_email_basic == 'true' or send_email_basic == 'TRUE':
 	send_email_basic = True	
 else:
-	send_email_basic = False	
+	send_email_basic = False
 
 # Remove all '_' from the name
 camera_name = camera_name.replace('_',' ')	
@@ -109,8 +109,11 @@ def normalize(arr):
 # Import push notification library
 if use_pushbullet == True:
 	from pushbullet import Pushbullet
-	for access_token in token_list:
-		pushbullet_list.append(Pushbullet(access_token))
+	try:
+		for access_token in token_list:
+			pushbullet_list.append(Pushbullet(access_token))
+	except:
+		pass
 	
 # Import arguments sent to this script
 new_fold = sys.argv[1]
@@ -135,6 +138,10 @@ else:
 jpg_files = sorted(glob.glob('*jpg'), reverse=False)
 new_file_name = jpg_files[0]
 
+# Move the jpg file to the insync directory
+to_move1 = 'sudo cp %s %s' %(new_file_name,directory_me) 
+os.system(to_move1)
+
 # Now rename all files for simplicity
 for xt,my_file1 in enumerate(jpg_files):
 	to_do = 'sudo mv %s image_' %(my_file1)
@@ -148,7 +155,8 @@ jpg_files = sorted(glob.glob('*jpg'), reverse=False)
 # Create avi (video) file by using ffmpeg - msmpeg4?
 to_avi = "sudo ffmpeg -framerate 5 -i 'image_%05d.jpg' -vcodec mpeg4" 
 to_avi += " %s.avi" %(new_file_name[:-4])
-subprocess.Popen(to_avi, shell=True, stdout=subprocess.PIPE)
+#subprocess.Popen(to_avi, shell=True, stdout=subprocess.PIPE)
+os.system(to_avi)
 	
 # Determine the name of the last jpeg file to use as a reference for motion comparisons	
 last_jpg_file = jpg_files[len(jpg_files)-1]
@@ -183,15 +191,11 @@ if use_pushbullet == True:
 		identity1 = new_push[0].get("iden")
 		to_identity = 'echo "%s %s" >> /home/pi/Desktop/txt_files/push_list%s.txt' %(identity1, time.time(),itir)
 		os.system(to_identity)
-		
+	
 if send_email == True:
 	for my_email in email_list:
-		to_send1 = 'mpack -s %s %s %s' %(camera_name,new_file_name,my_email)
+		to_send1 = "mpack -s '%s' %s %s" %(camera_name,new_file_name,my_email)
 		os.system(to_send1)	
-
-# Move the jpg file to the insync directory
-to_move1 = 'sudo mv %s %s' %(new_file_name,directory_me) 
-os.system(to_move1)
 
 # Remove all the other jpg files
 os.system('sudo rm *jpg* >/dev/null 2>&1')

@@ -53,6 +53,18 @@ if use_pushbullet == True:
 		to_load = '/home/pi/Desktop/txt_files/push_list%s.txt' %(itir)
 		numpytxt = N.loadtxt(to_load,dtype='str')
 		
+		# First make sure all pushes are in the .txt file, else add them first
+		new_push = pushme1.get_pushes()
+		for xtt in range(len(new_push)):
+			new_iden = new_push[xtt].get("iden")
+			if new_iden not in numpytxt[:,0]:
+				to_identity = 'echo "%s %s" >> /home/pi/Desktop/txt_files/push_list%s.txt' %(new_iden, time.time(),itir)
+				os.system(to_identity)
+				
+		# Reload the .txt file		
+		to_load = '/home/pi/Desktop/txt_files/push_list%s.txt' %(itir)
+		numpytxt = N.loadtxt(to_load,dtype='str')
+		
 		# If only one line exists, then have to go a different route
 		multiple = True
 		try:
