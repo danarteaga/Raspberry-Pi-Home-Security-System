@@ -464,18 +464,14 @@ while looper == True:
 								os.system(to_send1)
 
 						if use_pushbullet == True:		
-							try:
-								for itir,pushme1 in enumerate(pushbullet_list):
-									pushme1.push_note("Alert","Siren manually turned off")		
-									new_push = pushme1.get_pushes()
-									
-									# Save the identity of the push to delete after 2 days
-									identity1 = new_push[0].get("iden")
-									to_identity = 'echo "%s %s" >> /home/pi/Desktop/txt_files/push_list%s.txt' %(identity1, time.time(),itir)
-									os.system(to_identity)	
-							except:
-								pass
-					
+							for itir,pushme1 in enumerate(pushbullet_list):
+								pushme1.push_note("Alert","Siren manually turned off")		
+								new_push = pushme1.get_pushes()
+								
+								# Save the identity of the push to delete after 2 days
+								identity1 = new_push[0].get("iden")
+								to_identity = 'echo "%s %s" >> /home/pi/Desktop/txt_files/push_list%s.txt' %(identity1, time.time(),itir)
+								os.system(to_identity)	
 					else:
 					
 						# Send text/email/pushbullet warning if sensor that is tripped				
@@ -491,16 +487,13 @@ while looper == True:
 
 						if use_pushbullet == True:		
 							for itir,pushme1 in enumerate(pushbullet_list):
-								try:
-									pushme1.push_note("Alert","Siren turned off after 5 minutes")	
-									new_push = pushme1.get_pushes()
-									
-									# Save the identity of the push to delete after 2 days
-									identity1 = new_push[0].get("iden")
-									to_identity = 'echo "%s %s" >> /home/pi/Desktop/txt_files/push_list%s.txt' %(identity1, time.time(),itir)
-									os.system(to_identity)		
-								except:
-									pass
+								pushme1.push_note("Alert","Siren turned off after 5 minutes")	
+								new_push = pushme1.get_pushes()
+								
+								# Save the identity of the push to delete after 2 days
+								identity1 = new_push[0].get("iden")
+								to_identity = 'echo "%s %s" >> /home/pi/Desktop/txt_files/push_list%s.txt' %(identity1, time.time(),itir)
+								os.system(to_identity)		
 				
 				# Reset triggered files	
 				os.chdir('/home/pi/Desktop/txt_files')

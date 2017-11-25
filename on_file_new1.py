@@ -113,7 +113,7 @@ if use_pushbullet == True:
 		for access_token in token_list:
 			pushbullet_list.append(Pushbullet(access_token))
 	except:
-		pass
+		use_pushbullet = False
 	
 # Import arguments sent to this script
 new_fold = sys.argv[1]

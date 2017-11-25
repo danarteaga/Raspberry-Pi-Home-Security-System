@@ -71,13 +71,13 @@ if use_pushbullet == True:
 		for access_token in token_list:
 			pushbullet_list.append(Pushbullet(access_token))
 	except: 
-		pass
+		use_pushbullet = False
 
 # Import arguments
 door_to_show = sys.argv[1]
 
 # Remove all '_' from the name
-door_to_show.replace('_',' ')
+door_to_show = door_to_show.replace('_',' ')
 
 # Send update
 if use_pushbullet == True:
