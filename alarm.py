@@ -44,7 +44,8 @@ for new_lines in content:
 			if 'domain_name' in new_lines:
 				domain_name = new_lines.split(" ")[1:][0]
 			if 'video_port' in new_lines:
-				video_port = new_lines.split(" ")[1:][0]		
+				video_port = new_lines.split(" ")[1:][0]	
+				
 	except:
 		pass
 				
