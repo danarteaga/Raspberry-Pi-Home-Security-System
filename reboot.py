@@ -98,7 +98,32 @@ for i, line in enumerate(fileinput.input('check_system.sh', inplace=1)):
 		sys.stdout.write('\n')	
 		only_once1 = True
 	else:
-		sys.stdout.write(line.replace('\r', ''))		
+		sys.stdout.write(line.replace('\r', ''))	
+		
+# Update the vacation_return.py file
+only_once = False
+for i, line in enumerate(fileinput.input('vacation_away.py', inplace=1)):
+	if '/usr/bin/wget' in line and line[0] != '#' and only_once == False:
+		abc_123 = '/usr/bin/wget -q -O /dev/null "%s:%s/0/detection/start"' %(ip_address,control_port)
+		to_out = "os.system('" + abc_123 + "')"
+		sys.stdout.write(to_out)	
+		sys.stdout.write('\n')
+		only_once = True		
+	else:
+		sys.stdout.write(line.replace('\r', ''))			
+
+# Update the vacation_return.py file
+only_once = False
+for i, line in enumerate(fileinput.input('vacation_return.py', inplace=1)):
+	if '/usr/bin/wget' in line and line[0] != '#' and only_once == False:
+		abc_123 = '/usr/bin/wget -q -O /dev/null "%s:%s/0/detection/pause"' %(ip_address,control_port)
+		to_out = "os.system('" + abc_123 + "')"
+		sys.stdout.write(to_out)	
+		sys.stdout.write('\n')
+		only_once = True		
+	else:
+		sys.stdout.write(line.replace('\r', ''))	
+		
 		
 # Read user-supplied RF codes		
 rf_name_list = []	

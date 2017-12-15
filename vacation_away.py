@@ -90,4 +90,9 @@ for line in out.splitlines():
 		pid = int(line.split(None, 1)[0])
 		to_kill = "sudo kill %s" %(pid)
 		os.system(to_kill)	
-p0 = subprocess.Popen(["sudo","/home/pi/Desktop/motion","-n","-c","/home/pi/Desktop/motion-mmalcam.conf"],preexec_fn=os.setsid)			
+
+time.sleep(5)			
+p0 = subprocess.Popen(["sudo","/home/pi/Desktop/motion","-n","-c","/home/pi/Desktop/motion-mmalcam.conf",">/dev/null","2>&1"],preexec_fn=os.setsid)
+
+# Make sure that motion detection is on
+os.system('/usr/bin/wget -q -O /dev/null "192.168.1.80:8086/0/detection/start"')
