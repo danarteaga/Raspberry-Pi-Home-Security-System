@@ -114,68 +114,74 @@ new_fold = sys.argv[1]
 to_change = '/home/pi/Desktop/Camera_%s' %(new_fold)
 os.chdir(to_change)
 
-# Create name of new folder based on current date and time
-today = datetime.date.today()
-folder = today.strftime('%y.') + today.strftime('%m.') + today.strftime('%d')
-
-# Create this new directory if one is not already present 
-directory_me = '/home/pi/%s/Camera/%s' %(insync_email,folder)
-if os.path.exists(directory_me):
-	pass
-else:
-	mkdir1 = 'sudo mkdir -p %s' %(directory_me)
-	os.system(mkdir1)
-	
-# Identify the filenames for the current motion event
+# Check to see if any files exist, else remove directory
 jpg_files = sorted(glob.glob('*jpg'), reverse=False)
-new_file_name = jpg_files[0]
+if len(jpg_files) == 0:
 
-# Move the jpg file to the insync directory
-to_move1 = 'sudo cp %s %s' %(new_file_name,directory_me) 
-os.system(to_move1)
+	to_delete = 'sudo rm -r /home/pi/Desktop/Camera_%s' %(new_fold)
+	os.chdir('/home/pi/Desktop/')
+	os.system(to_delete)
 
-# Now rename all files for simplicity
-for xt,my_file1 in enumerate(jpg_files):
-	to_do = 'sudo mv %s image_' %(my_file1)
-	to_do += '%05d' %(xt)
-	to_do += '.jpg >/dev/null 2>&1'
-	os.system(to_do)
-	
-# Resort files based upon these new names	
-jpg_files = sorted(glob.glob('*jpg'), reverse=False)	
+else:	
 
-# Create avi (video) file by using ffmpeg - msmpeg4?
-to_avi = "sudo ffmpeg -framerate 5 -i 'image_%05d.jpg' -vcodec mpeg4" 
-to_avi += " %s.avi" %(new_file_name[:-4])
-#subprocess.Popen(to_avi, shell=True, stdout=subprocess.PIPE)
-os.system(to_avi)
+	# Create name of new folder based on current date and time
+	today = datetime.date.today()
+	folder = today.strftime('%y.') + today.strftime('%m.') + today.strftime('%d')
 
-# Remove all the other jpg files
-os.system('sudo rm *jpg* >/dev/null 2>&1')
-
-# Identify the AVI video file, and don't move on until this file exists
-ab = False
-while ab == False:
-	avi_file = glob.glob('*avi*')
-	if len(avi_file) < 1:
-		time.sleep(0.2)
+	# Create this new directory if one is not already present 
+	directory_me = '/home/pi/%s/Camera/%s' %(insync_email,folder)
+	if os.path.exists(directory_me):
+		pass
 	else:
-		break
-#avi_file = to_change + '/' + avi_file[0]
+		mkdir1 = 'sudo mkdir -p %s' %(directory_me)
+		os.system(mkdir1)
 
-# Movie the avi video file to the insync directory
-to_do = 'sudo mv *avi* %s' %(directory_me) 
-os.system(to_do)
+	new_file_name = jpg_files[0]
+
+	# Move the jpg file to the insync directory
+	to_move1 = 'sudo cp %s %s' %(new_file_name,directory_me) 
+	os.system(to_move1)
+
+	# Now rename all files for simplicity
+	for xt,my_file1 in enumerate(jpg_files):
+		to_do = 'sudo mv %s image_' %(my_file1)
+		to_do += '%05d' %(xt)
+		to_do += '.jpg >/dev/null 2>&1'
+		os.system(to_do)
+		
+	# Resort files based upon these new names	
+	jpg_files = sorted(glob.glob('*jpg'), reverse=False)	
+
+	# Create avi (video) file by using ffmpeg - msmpeg4?
+	to_avi = "sudo ffmpeg -framerate 5 -i 'image_%05d.jpg' -vcodec mpeg4" 
+	to_avi += " %s.avi" %(new_file_name[:-4])
+	#subprocess.Popen(to_avi, shell=True, stdout=subprocess.PIPE)
+	os.system(to_avi)
+
+	# Remove all the other jpg files
+	os.system('sudo rm *jpg* >/dev/null 2>&1')
+
+	# Identify the AVI video file, and don't move on until this file exists
+	ab = False
+	while ab == False:
+		avi_file = glob.glob('*avi*')
+		if len(avi_file) < 1:
+			time.sleep(0.2)
+		else:
+			break
+	#avi_file = to_change + '/' + avi_file[0]
+
+	# Movie the avi video file to the insync directory
+	to_do = 'sudo mv *avi* %s' %(directory_me) 
+	os.system(to_do)
 
 
-# Delete this temporary Camera directory
-to_delete = 'sudo rm -r /home/pi/Desktop/Camera_%s' %(new_fold)
-os.chdir('/home/pi/Desktop/')
-os.system(to_delete)
+	# Delete this temporary Camera directory
+	to_delete = 'sudo rm -r /home/pi/Desktop/Camera_%s' %(new_fold)
+	os.chdir('/home/pi/Desktop/')
+	os.system(to_delete)
 
-
-# Remove this directory
-#cwd = os.getcwd()
-#os.chdir('/home/pi/Desktop/')
-#os.system(cwd)
-
+	# Remove this directory
+	#cwd = os.getcwd()
+	#os.chdir('/home/pi/Desktop/')
+	#os.system(cwd)
