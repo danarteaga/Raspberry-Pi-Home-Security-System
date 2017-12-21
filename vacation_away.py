@@ -11,8 +11,11 @@ content = [x.strip() for x in content]
 		
 email_list = []
 text_list = []
+email_list_vacation = []
+text_list_vacation = []
 token_list = []	
 pushbullet_list = []	
+user_id_list = []
 for new_lines in content:	
 	try:
 		if new_lines[0] != '#':
@@ -24,12 +27,16 @@ for new_lines in content:
 				send_text = new_lines.split(" ")[1:][0]		
 			if 'my_number' in new_lines:
 				text_list.append(new_lines.split(" ")[1:][0])	
+			if 'vacation_number' in new_lines:
+				text_list_vacation.append(new_lines.split(" ")[1:][0])					
 			if 'send_email' in new_lines:
 				send_email = new_lines.split(" ")[1:][0]
 			if 'email_basic' in new_lines:
 				send_email_basic = new_lines.split(" ")[1:][0]
 			if 'my_email' in new_lines:
-				email_list.append(new_lines.split(" ")[1:][0])			
+				email_list.append(new_lines.split(" ")[1:][0])		
+			if 'vacation_email' in new_lines:
+				email_list_vacation.append(new_lines.split(" ")[1:][0])					
 			if 'siren_on' in new_lines:
 				siren_on = new_lines.split(" ")[1:][0]
 			if 'siren_off' in new_lines:
@@ -38,9 +45,21 @@ for new_lines in content:
 				domain_name = new_lines.split(" ")[1:][0]
 			if 'video_port' in new_lines:
 				video_port = new_lines.split(" ")[1:][0]	
+			if 'user_id' in new_lines:
+				user_id_list.append(new_lines.split(" ")[1:][0])	
+			if 'emergency_contact' in new_lines:
+				emergency_contact = new_lines.split(" ")[1:]					
 	except:
 		pass
 	
+pronoun = ['I','my','I','me']	
+if len(user_id_list) == 2:
+	pronoun = ['We','our','we','us']
+	
+if len(user_id_list) == 1:	
+	final_user_id = user_id_list[0]
+else:
+	final_user_id = " and ".join(user_id_list)
 
 my_camera = "%s:%s" %(domain_name,video_port)	
 
@@ -51,23 +70,33 @@ import os,sys,time,random,string,fileinput,subprocess,glob
 random_pass = ''.join(random.SystemRandom().choice(string.ascii_lowercase + string.digits) for _ in range(6))
 
 # Send email to each recipient
-email_body = 'Dear family and friends,\n\nWe will be going out of town today, and wanted to invite you'
-email_body += ' to monitor our home remotely. To do so, we will provide you with exclusive access to our 24/7 live camera'
+email_body = 'Dear family and friends,\n\n'
+email_body += '%s will be going out of town today, and wanted to invite you' %(pronoun[0])
+email_body += ' to monitor %s home remotely. To do so, %s will provide you with exclusive access to %s 24/7 live camera' %(pronoun[1],pronoun[2],pronoun[1])
 email_body += ' feed (see below for details). In addition, you will receive new motion images via email. The vast'
 email_body += ' majority of these images will be false positives (e.g. a change in lighting). However, if you do'
 email_body += ' see someone in the house that you do NOT recognize (either on the 24/7 live camera feed or in the image'
-email_body += ' sent to your email), please consider contacting local authorities as below:\n\n'
-email_body += 'Charlottesville Police:\n(434) 970-3280.\n\n24/7 Live Camera Feed:\n'
+email_body += ' sent to your email), please consider contacting the contact listed below below:\n\n'
+email_body += '%s' %(" ".join(emergency_contact))
+email_body += '\n\n24/7 Live Camera Feed:\n'
 email_body += 'Website = %s\nUsername = guest\nTemporary password = %s' %(my_camera,random_pass)
-email_body += '\n\nYou will receive another text and email notification upon our return. Please contact me if you have any further questions.'
-email_body += '\n\nBest,\nDan'
+email_body += '\n\nYou will receive another text and email notification upon %s return.' %(pronoun[1])
+email_body += 'Please contact %s if you have any further questions.' %(pronoun[3])
+email_body += '\n\nBest,\n%s' %(final_user_id)
 
 for my_email in email_list:		
 	to_send1 = 'sudo echo "%s" | mail -s "Invitation to monitor home while on vacation" %s' %(email_body,my_email)
-	os.system(to_send1)		
-	
+	os.system(to_send1)	
+
+for my_email in email_list_vacation:		
+	to_send1 = 'sudo echo "%s" | mail -s "Invitation to monitor home while on vacation" %s' %(email_body,my_email)
+	os.system(to_send1)			
 
 for my_number in text_list:
+	to_send1 = 'sudo echo "%s" | mail -s "%s" %s' %('Going out of town! Check your email for details.','',my_number)
+	os.system(to_send1)		
+
+for my_number in text_list_vacation:
 	to_send1 = 'sudo echo "%s" | mail -s "%s" %s' %('Going out of town! Check your email for details.','',my_number)
 	os.system(to_send1)			
 	
@@ -95,4 +124,4 @@ time.sleep(5)
 p0 = subprocess.Popen(["sudo","/home/pi/Desktop/motion","-n","-c","/home/pi/Desktop/motion-mmalcam.conf",">/dev/null","2>&1"],preexec_fn=os.setsid)
 
 # Make sure that motion detection is on
-os.system('/usr/bin/wget -q -O /dev/null "192.168.1.80:8086/0/detection/start"')
+os.system('/usr/bin/wget -q -O /dev/null "192.168.1.110:8086/0/detection/start"')

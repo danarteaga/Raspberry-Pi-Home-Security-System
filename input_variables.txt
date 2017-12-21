@@ -5,6 +5,11 @@
 #   IN ORDER TO MAKE THESE CHANGES TAKE EFFECT   # 
 ##################################################
 
+
+
+##################################################
+BASIC SETTINGS
+##################################################
 # Raspberry pi local IP address:
 ip_address 192.168.1.80 
 
@@ -18,10 +23,9 @@ python_interpreter /usr/bin/python
 ##### Note: If you are running multiple RPIs, each pi must have a unique video_port ID 
 video_port 8081
 
-# The port (e.g. 192.168.1.80:8086) that allows the user to run Motion software commands (e.g. start, pause) via HTML :
+# The port (e.g. 192.168.1.80:8086) that allows the user to run Motion software commands (e.g. start, pause) via HTML:
 ##### Note: If you are running multiple RPIs, each pi must have a unique control_port ID 
 control_port 8086 
-
 
 # Name of the camera for this Raspberry Pi (separate spaces with '_'):
 camera_name Living_Room
@@ -33,23 +37,50 @@ video_credentials username:password
 rotate_camera 0
 
 
+
+##################################################
+VACATION SETTINGS
+##################################################
+# Enter the first name(s) of the Raspberry Pi owner(s) (can enter up to 2)
+user_id Pi
+user_id Pie
+
+# Enter in emergency contact information if there was an event such as an intrusion (Contact: number/email)
+emergency_contact Local Police: (555) 123-4567
+
+# The number(s) and cell-phone service(s) to send notifications to while on vacation, in addition to the number(s) listed in the 
+##### NOTIFICATION SETTINGS section below; this can be found at:
+##### http://www.linuxjournal.com/content/system-status-sms-text-messages
+##### For example, for AT&T it would be: 1234567890@txt.att.net and for Verizon it would be: 1234567890@vtext.com
+##### This can also be a list of numbers, making sure each line begins with 'vacation_number':
+vacation_number 1234567890@vtext.com
+
+# The email address(es} to send notifications to while on vacation, in addition to the email(s) listed in the NOTIFICATION SETTINGS section below.
+##### Make sure to put your email down even if you intend to receive notifications via PushBullet;
+##### if PushBullet fails, it will default to sending emails instead.
+##### This can also be a list of emails, making sure each line begins with 'vacation_email': 
+vacation_email myaddress@gmail.com
+
+
+
+##################################################
+NOTIFICATION SETTINGS
+##################################################
 # The email address of the Insync profile (gmail only):
-##### Note: Just found a potential bug...if this ever has to be updated after it is saved, 
-##### then you also need to manually update automate_tasks.txt in line: 31 1 * * * sudo ...
 insync_email myemail@gmail.com
 	
 # Whether or not to send push notifications via Pushbullet (True/False).
-##### Of note, Pushbullet doesn't actually push notifications to IOS devices right now...
+##### Note: Pushbullet doesn't actually push notifications to IOS devices right now...
 use_pushbullet False
 
-# The Pushbullet Access Token, which can be acquired at https://www.pushbullet.com/#settings/account
+# The Pushbullet Access Token(s), which can be acquired at https://www.pushbullet.com/#settings/account
 ##### This can also be a list of access tokens, making sure each line begins with 'access_token':
 access_token o.aGEGWfgewgwAyjfWHkyebsdfsdfr
 
 # Whether or not you want to send text message notifications (True/False):
 send_text True
 
-# The number and cell-phone service to be used; this can be found at:
+# The number(s) and cell-phone service(s) to be used; this can be found at:
 ##### http://www.linuxjournal.com/content/system-status-sms-text-messages
 ##### For example, for AT&T it would be: 1234567890@txt.att.net and for Verizon it would be: 1234567890@vtext.com
 ##### This can also be a list of numbers, making sure each line begins with 'my_number':
@@ -61,16 +92,17 @@ send_email True
 # Whether or not to send an email if a sensor is activated (True/False):
 email_basic False
 
-# The email address to send notifications to (any client will do).
-# Make sure to put your email down even if you intend to receive notifications via PushBullet;
-# if PushBullet fails, it will default to sending emails instead.
+# The email address(es} to send notifications to (any client will do).
+##### Make sure to put your email down even if you intend to receive notifications via PushBullet;
+##### if PushBullet fails, it will default to sending emails instead.
 ##### This can also be a list of emails, making sure each line begins with 'my_email': 
 my_email myaddress@gmail.com
 
 
-# You do not need to complete below this line for Raspberry Pis that will function solely as cameras
-#####################################################################################################
 
+##################################################
+RADIOFREQUENCY SETTINGS
+##################################################
 # The radiofrequency (RF) numeric code for turning the siren on (the S button):
 siren_on 15346345
 

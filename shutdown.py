@@ -6,8 +6,7 @@
 		
 
 # Import required libraries
-import sys,os,glob
-import fileinput
+import sys,os,glob,re,fileinput
 		
 # Read the input_variable.txt file:
 with open('input_variables.txt') as f:
@@ -165,10 +164,11 @@ for i, line in enumerate(fileinput.input('motion-mmalcam.conf', inplace=1)):
 	else:
 		sys.stdout.write(line.replace('\r', ''))	
 		
-# Update the automate_tasks.txt file...this will not update if saved a second time though...
+# Update the automate_tasks.txt file
 for i, line in enumerate(fileinput.input('automate_tasks.txt', inplace=1)):
-	if 'insync_email@gmail.com' in line and line[0] != '#':
-		sys.stdout.write(line.replace('insync_email@gmail.com', insync_email))
+	if '-exec' in line and line[0] != '#':
+		newline1 = '31 1 * * * sudo find /home/pi/%s/Camera -type d -ctime +30 -exec rm -rf {} \; >/dev/null 2>&1' %(insync_email)
+		sys.stdout.write(newline1)
 		sys.stdout.write('\n')	
 	else:
 		sys.stdout.write(line.replace('\r', ''))			
