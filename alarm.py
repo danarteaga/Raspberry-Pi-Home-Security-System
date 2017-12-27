@@ -18,6 +18,8 @@ email_list = []
 text_list = []
 token_list = []	
 pushbullet_list = []	
+email_list_vacation = []
+text_list_vacation = []
 for new_lines in content:	
 	try:
 		if new_lines[0] != '#':
@@ -28,13 +30,17 @@ for new_lines in content:
 			if 'send_text' in new_lines:
 				send_text = new_lines.split(" ")[1:][0]		
 			if 'my_number' in new_lines:
-				text_list.append(new_lines.split(" ")[1:][0])	
+				text_list.append(new_lines.split(" ")[1:][0])
+			if 'vacation_email' in new_lines:
+				email_list_vacation.append(new_lines.split(" ")[1:][0])					
 			if 'send_email' in new_lines:
 				send_email = new_lines.split(" ")[1:][0]
 			if 'email_basic' in new_lines:
 				send_email_basic = new_lines.split(" ")[1:][0]
 			if 'my_email' in new_lines:
 				email_list.append(new_lines.split(" ")[1:][0])		
+			if 'vacation_number' in new_lines:
+				text_list_vacation.append(new_lines.split(" ")[1:][0])						
 			if 'python_interpreter' in new_lines:
 				python_interpreter = new_lines.split(" ")[1:][0]		
 			if 'siren_on' in new_lines:
@@ -349,9 +355,24 @@ while looper == True:
 						for my_number in text_list:
 							to_send1 = 'echo "Siren activated" | mail -s "Alert" %s' %(my_number)
 							os.system(to_send1)			
+							
+					# Load data from the input_variable.txt file:
+					with open("txt_files/vacation.txt", "r") as fo2:
+						vacation_status = fo2.readline()
+					fo2.close()	
+					
+					if vacation_status == "1":					
+						for my_number in text_list_vacation:
+							to_send1 = 'echo "Siren activated" | mail -s "Alert" %s' %(my_number)
+							os.system(to_send1)						
 
 					if send_email_basic == True:
 						for my_email in email_list:
+							to_send1 = 'echo "Siren activated" | mail -s "Alert" %s' %(my_email)
+							os.system(to_send1)
+
+					if vacation_status == "1":
+						for my_email in email_list_vacation:
 							to_send1 = 'echo "Siren activated" | mail -s "Alert" %s' %(my_email)
 							os.system(to_send1)
 
@@ -457,12 +478,22 @@ while looper == True:
 						if send_text == True:
 							for my_number in text_list:
 								to_send1 = 'echo "Siren manually turned off" | mail -s "Alert" %s' %(my_number)
-								os.system(to_send1)			
+								os.system(to_send1)		
+
+						if vacation_status == "1":					
+							for my_number in text_list_vacation:
+								to_send1 = 'echo "Siren manually turned off" | mail -s "Alert" %s' %(my_number)
+								os.system(to_send1)										
 
 						if send_email_basic == True:
 							for my_email in email_list:
 								to_send1 = 'echo "Siren manually turned off" | mail -s "Alert" %s' %(my_email)
 								os.system(to_send1)
+								
+						if vacation_status == "1":		
+							for my_email in email_list_vacation:
+								to_send1 = 'echo "Siren manually turned off" | mail -s "Alert" %s' %(my_email)
+								os.system(to_send1)						
 
 						if use_pushbullet == True:		
 							for itir,pushme1 in enumerate(pushbullet_list):
@@ -479,12 +510,22 @@ while looper == True:
 						if send_text == True:
 							for my_number in text_list:
 								to_send1 = 'echo "Siren turned off after 5 minutes" | mail -s "Alert" %s' %(my_number)
-								os.system(to_send1)			
+								os.system(to_send1)		
 
+						if vacation_status == "1":					
+							for my_number in text_list_vacation:								
+								to_send1 = 'echo "Siren turned off after 5 minutes" | mail -s "Alert" %s' %(my_number)
+								os.system(to_send1)	
+								
 						if send_email_basic == True:
 							for my_email in email_list:
 								to_send1 = 'echo "Siren turned off after 5 minutes" | mail -s "Alert" %s' %(my_email)
 								os.system(to_send1)
+								
+						if vacation_status == "1":					
+							for my_email in email_list_vacation:	
+								to_send1 = 'echo "Siren turned off after 5 minutes" | mail -s "Alert" %s' %(my_email)
+								os.system(to_send1)							
 
 						if use_pushbullet == True:		
 							for itir,pushme1 in enumerate(pushbullet_list):

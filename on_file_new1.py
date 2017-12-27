@@ -11,6 +11,7 @@ content = [x.strip() for x in content]
 		
 email_list = []
 text_list = []
+email_list_vacation = []
 token_list = []	
 pushbullet_list = []	
 for new_lines in content:	
@@ -33,7 +34,9 @@ for new_lines in content:
 			if 'email_basic' in new_lines:
 				send_email_basic = new_lines.split(" ")[1:][0]
 			if 'my_email' in new_lines:
-				email_list.append(new_lines.split(" ")[1:][0])			
+				email_list.append(new_lines.split(" ")[1:][0])	
+			if 'vacation_email' in new_lines:
+				email_list_vacation.append(new_lines.split(" ")[1:][0])						
 			if 'siren_on' in new_lines:
 				siren_on = new_lines.split(" ")[1:][0]
 			if 'siren_off' in new_lines:
@@ -194,6 +197,16 @@ if use_pushbullet == True:
 	
 if send_email == True:
 	for my_email in email_list:
+		to_send1 = "mpack -s '%s' %s %s" %(camera_name,new_file_name,my_email)
+		os.system(to_send1)	
+		
+# Load data from the input_variable.txt file:
+with open("txt_files/vacation.txt", "r") as fo2:
+	vacation_status = fo2.readline()
+fo2.close()	
+
+if vacation_status == "1":
+	for my_email in email_list_vacation:
 		to_send1 = "mpack -s '%s' %s %s" %(camera_name,new_file_name,my_email)
 		os.system(to_send1)	
 

@@ -41,7 +41,8 @@ rotate_camera 0
 ##################################################
 VACATION SETTINGS
 ##################################################
-# Enter the first name(s) of the Raspberry Pi owner(s) (can enter up to 2)
+# Enter the first name(s) of the Raspberry Pi owner(s)
+##### This can be a list of names, making sure each line begins with 'user_id':
 user_id Pi
 user_id Pie
 

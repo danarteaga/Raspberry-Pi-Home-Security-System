@@ -53,15 +53,20 @@ for new_lines in content:
 		pass
 	
 pronoun = ['I','my','I','me']	
-if len(user_id_list) == 2:
+if len(user_id_list) > 1:
 	pronoun = ['We','our','we','us']
 	
 if len(user_id_list) == 1:	
 	final_user_id = user_id_list[0]
-else:
+elif len(user_id_list) == 2:
 	final_user_id = " and ".join(user_id_list)
+else:
+	final_user_id = '{}, and {}'.format(', '.join(listed[:-1]), listed[-1])	
 
 my_camera = "%s:%s" %(domain_name,video_port)	
+
+# Store vacation settings
+os.system("echo -n 1 > txt_files/vacation.txt")
 
 # Import required libraries
 import os,sys,time,random,string,fileinput,subprocess,glob
@@ -76,12 +81,12 @@ email_body += ' to monitor %s home remotely. To do so, %s will provide you with 
 email_body += ' feed (see below for details). In addition, you will receive new motion images via email. The vast'
 email_body += ' majority of these images will be false positives (e.g. a change in lighting). However, if you do'
 email_body += ' see someone in the house that you do NOT recognize (either on the 24/7 live camera feed or in the image'
-email_body += ' sent to your email), please consider contacting the contact listed below below:\n\n'
+email_body += ' sent to your email), please consider contacting the contact listed below:\n\n'
 email_body += '%s' %(" ".join(emergency_contact))
 email_body += '\n\n24/7 Live Camera Feed:\n'
 email_body += 'Website = %s\nUsername = guest\nTemporary password = %s' %(my_camera,random_pass)
 email_body += '\n\nYou will receive another text and email notification upon %s return.' %(pronoun[1])
-email_body += 'Please contact %s if you have any further questions.' %(pronoun[3])
+email_body += ' Please contact %s if you have any further questions.' %(pronoun[3])
 email_body += '\n\nBest,\n%s' %(final_user_id)
 
 for my_email in email_list:		
@@ -124,4 +129,4 @@ time.sleep(5)
 p0 = subprocess.Popen(["sudo","/home/pi/Desktop/motion","-n","-c","/home/pi/Desktop/motion-mmalcam.conf",">/dev/null","2>&1"],preexec_fn=os.setsid)
 
 # Make sure that motion detection is on
-os.system('/usr/bin/wget -q -O /dev/null "192.168.1.110:8086/0/detection/start"')
+os.system('/usr/bin/wget -q -O /dev/null "192.168.1.80:8086/0/detection/start"')

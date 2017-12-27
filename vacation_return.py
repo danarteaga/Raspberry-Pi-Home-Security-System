@@ -53,10 +53,20 @@ for new_lines in content:
 		pass
 
 pronoun = ['I','my','I','me']	
-if len(user_id_list) == 2:
-	pronoun = ['We','our','we','us']		
+if len(user_id_list) > 1:
+	pronoun = ['We','our','we','us']
+	
+if len(user_id_list) == 1:	
+	final_user_id = user_id_list[0]
+elif len(user_id_list) == 2:
+	final_user_id = " and ".join(user_id_list)
+else:
+	final_user_id = '{}, and {}'.format(', '.join(listed[:-1]), listed[-1])	
 
 my_camera = "%s:%s" %(domain_name,video_port)	
+
+# Store vacation settings
+os.system("echo -n 0 > txt_files/vacation.txt")
 
 # Import required libraries
 import os,sys,time,random,string,fileinput,subprocess,glob
@@ -92,17 +102,8 @@ for i, line in enumerate(fileinput.input('motion-mmalcam.conf', inplace=1)):
 	else:
 		sys.stdout.write(line.replace('\r', ''))		
 	
-# Restart the motion daemon
-p = subprocess.Popen(['ps', '-A'], stdout=subprocess.PIPE)
-out, err = p.communicate()
-for line in out.splitlines():
-	if 'motion' in line:
-		pid = int(line.split(None, 1)[0])
-		to_kill = "sudo kill %s" %(pid)
-		os.system(to_kill)	
-	
-time.sleep(5)	
-p1 = subprocess.Popen(["sudo","/home/pi/Desktop/motion","-n","-c","/home/pi/Desktop/motion-mmalcam.conf",">/dev/null","2>&1"],preexec_fn=os.setsid)
-
 # Make sure that motion detection is off
-os.system('/usr/bin/wget -q -O /dev/null "192.168.1.110:8086/0/detection/pause"')
+os.system('/usr/bin/wget -q -O /dev/null "192.168.1.80:8086/0/detection/pause"')
+
+# Restart the system
+os.system('sudo reboot.py')
