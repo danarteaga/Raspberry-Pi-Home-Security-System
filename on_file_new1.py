@@ -183,6 +183,11 @@ os.system(to_name)
 
 # Send image as push notification	
 new_motion = "New Motion in %s" %(camera_name)
+if send_email == True:
+	for my_email in email_list:
+		to_send1 = "mpack -s '%s' %s %s" %(camera_name,new_file_name,my_email)
+		os.system(to_send1)	
+		
 if use_pushbullet == True:
 	for itir,pushme1 in enumerate(pushbullet_list):
 		with open(new_file_name, "rb") as picture:
@@ -194,11 +199,7 @@ if use_pushbullet == True:
 		identity1 = new_push[0].get("iden")
 		to_identity = 'echo "%s %s" >> /home/pi/Desktop/txt_files/push_list%s.txt' %(identity1, time.time(),itir)
 		os.system(to_identity)
-	
-if send_email == True:
-	for my_email in email_list:
-		to_send1 = "mpack -s '%s' %s %s" %(camera_name,new_file_name,my_email)
-		os.system(to_send1)	
+			
 		
 # Load data from the input_variable.txt file:
 with open("txt_files/vacation.txt", "r") as fo2:

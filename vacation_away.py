@@ -4,6 +4,8 @@
 
 # This script will send notifications as a subprocess
 
+import os
+
 # Load data from the input_variable.txt file:
 with open('input_variables.txt') as f:
 	content = f.readlines()

@@ -4,6 +4,8 @@
 
 # This script will send notifications as a subprocess
 
+import os
+
 # Load data from the input_variable.txt file:
 with open('input_variables.txt') as f:
 	content = f.readlines()
@@ -49,6 +51,8 @@ for new_lines in content:
 				user_id_list.append(new_lines.split(" ")[1:][0])	
 			if 'emergency_contact' in new_lines:
 				emergency_contact = new_lines.split(" ")[1:][0]	
+			if 'stream_authentication' in new_lines:
+				video_credentials = new_lines.split(" ")[1:][0]					
 	except:
 		pass
 
@@ -106,4 +110,4 @@ for i, line in enumerate(fileinput.input('motion-mmalcam.conf', inplace=1)):
 os.system('/usr/bin/wget -q -O /dev/null "192.168.1.80:8086/0/detection/pause"')
 
 # Restart the system
-os.system('sudo reboot.py')
+os.system('sudo python reboot.py')
